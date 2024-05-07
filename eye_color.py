@@ -123,11 +123,15 @@ def eye_color(image, person_name):
     
     return eye_class
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
+def eye_color_detection(mother_image, father_image, child_image):
     # Paths to images of mother, father, and child
-    mother_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/mother4.jpg'
-    father_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/father1.jpg'
-    child_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/child22.jpg'
+    # mother_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/mother4.jpg'
+    # father_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/father1.jpg'
+    # child_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/child22.jpg'
+    mother_image_path = mother_image
+    father_image_path = father_image
+    child_image_path = child_image
     # Load images
     mother_image = cv2.imread(mother_image_path, cv2.IMREAD_COLOR)
     father_image = cv2.imread(father_image_path, cv2.IMREAD_COLOR)
@@ -147,8 +151,10 @@ if __name__ == '__main__':
     relatedness = calculate_eye_color_probabilities(mother_dominant_eye_color, father_dominant_eye_color, child_dominant_eye_color)
     if relatedness is not None:
         print(f"The child is biologically related to the parents by approximately {relatedness*100:.2f}%")
+        return relatedness
     else:
         print("Biological relatedness could not be determined.")
+        return 0
 
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
