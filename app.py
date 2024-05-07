@@ -1,88 +1,15 @@
-# import streamlit as st
-# import cv2
-# import tensorflow as tf
-# import numpy as np
-# from tensorflow.keras.models import load_model
-# from mtcnn import MTCNN
-
-# # Load the trained model
-# model = load_model('model.h5')  # Replace with your model path
-
-# # List of class names
-# classes = ['Fair_Light', 'Medium_Tan', 'Dark_Deep']
-
-# # Mapping dictionary for descriptive skin tone labels
-# descriptive_labels = {
-#     'Fair_Light': 'Fair / Light',
-#     'Medium_Tan': 'Medium / Tan',
-#     'Dark_Deep': 'Dark / Deep'
-# }
-
-# # Load the MTCNN face detection model
-# mtcnn = MTCNN()
-
-# # Set app title
-# st.title('ToneSense: Discovering Diversity in Skin Tones through AI')
-
-# # Upload image through file uploader
-# uploaded_file = st.file_uploader('Upload an image ', type=['jpg', 'jpeg', 'png'])
-
-# # Display uploaded image
-# if uploaded_file is not None:
-#     image = np.array(bytearray(uploaded_file.read()), dtype=np.uint8)
-#     image = cv2.imdecode(image, 1)
-    
-       
-#     # Predict button
-#     if st.button('Predict Skin Tone'):
-#         # Detect faces
-#         try:
-#             faces = mtcnn.detect_faces(image)
-#             if len(faces) > 0:
-#                 largest_face = max(faces, key=lambda f: f['box'][2] * f['box'][3])
-#                 x, y, w, h = largest_face['box']
-#                 detected_face = image[y:y+h, x:x+w]
-                
-#                 # Resize the detected face to the desired input shape
-#                 detected_face = cv2.resize(detected_face, (120, 90))
-                
-#                 # Preprocess the detected face for classification
-#                 detected_face = tf.keras.applications.mobilenet_v2.preprocess_input(detected_face[np.newaxis, ...])
-                
-#                 # Predict the class of the face
-#                 predictions = model.predict(detected_face)
-#                 predicted_class_idx = np.argmax(predictions)
-#                 predicted_class = classes[predicted_class_idx]
-                
-#                 # Get the descriptive label from the mapping dictionary
-#                 descriptive_label = descriptive_labels[predicted_class]
-                
-#                 # Display the prediction with a larger font and a message
-#                 st.write('')
-#                 st.write('')
-#                 st.write('')
-#                 st.write('**Predicted Skin Tone:**')
-#                 st.write(f'# {descriptive_label}')
-#             else:
-#                 st.write('No face detected in the uploaded image.')
-#         except Exception as e:
-#             st.write(f'Error detecting faces: {e}')
+import streamlit as st
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.models import load_model
+from mtcnn import MTCNN
+import cv2
+import eye_color
+import os
 
 
 
-
-
-
-# import streamlit as st
-# import numpy as np
-# import tensorflow as tf
-# from tensorflow.keras.models import load_model
-# from mtcnn import MTCNN
-# import cv2
-
-
-
-# def skin_tone(face_image):
+# def skin_tone():
 #     skin_tone_model = load_model('skin_tone_model.h5')
     
 #     # List of class names
@@ -90,7 +17,9 @@
 
 #     # Mapping dictionary for descriptive skin tone labels
 #     descriptive_labels = {
-#         'Fair_Light': 'Fair / Light',
+#         'Fair_Light': 'Fair / Light', # mother_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/mother4.jpg'
+#     # father_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/father1.jpg'
+#     # child_im
 #         'Medium_Tan': 'Medium / Tan',
 #         'Dark_Deep': 'Dark / Deep'
 #     }
@@ -98,7 +27,7 @@
 #     # Load the MTCNN face detection model
 #     mtcnn = MTCNN()
 
-#     uploaded_file = face_image
+#     uploaded_file = st.file_uploader('Upload an image ', type=['jpg', 'jpeg', 'png'])
 
 #     # Display uploaded image
 #     if uploaded_file is not None:
@@ -140,214 +69,6 @@
 #                     st.write('No face detected in the uploaded image.')
 #             except Exception as e:
 #                 st.write(f'Error detecting faces: {e}')
-
-
-
-
-
-
-
-
-
-# def main():
-
-#     blood_groups = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
-#     eye_colors = ['blue', 'brown', 'green']
-#     skin_tones = ['fair', 'light', 'tan']
-#     child_missing = True
-#     father_missing = True
-#     mother_missing = True
-
-#     st.title('VIRTUAL DNA TEST')
-
-#     with st.expander("Child Details"):
-#         child_face_image = st.file_uploader("Upload Child's FACE Image", type=["jpg", "png"])
-#         child_eye_image = st.file_uploader("Upload Child's EYE FOCUSED Image", type=["jpg", "png"])
-#         child_fingerprint_image = st.file_uploader("Upload Child's FINGERPRINT Image", type=["jpg", "png"])
-#         child_blood_group_index = st.selectbox("Select CHILD's Blood Group", options=range(len(blood_groups)), format_func=lambda x: blood_groups[x], index=0)
-#         child_blood_group = blood_groups[int(child_blood_group_index)]
-#         child_skin_tone_index = st.selectbox("Select CHILD's Skin Tone", options=range(len(skin_tones)), format_func=lambda x: skin_tones[x], index=0)
-#         child_skin_tone = skin_tones[int(child_skin_tone_index)]
-#         child_eye_color_index = st.selectbox("Select CHILD's Eye Color", options=range(len(eye_colors)), format_func=lambda x: eye_colors[x], index=0)
-#         child_eye_color = eye_colors[int(child_eye_color_index)]
-
-
-#     with st.expander("Father Details"):
-#         father_face_image = st.file_uploader("Upload Father's Face Image", type=["jpg", "png"])
-#         father_eye_image = st.file_uploader("Upload Father's EYE FOCUSED Image", type=["jpg", "png"])
-#         father_fingerprint_image = st.file_uploader("Upload Father's FINGERPRINT Image", type=["jpg", "png"])
-#         father_blood_group_index = st.selectbox("Select FATHER's Blood Group", options=range(len(blood_groups)), format_func=lambda x: blood_groups[x], index=0)
-#         father_blood_group = blood_groups[int(father_blood_group_index)]
-#         father_skin_tone_index = st.selectbox("Select FATHER's Skin Tone", options=range(len(skin_tones)), format_func=lambda x: skin_tones[x], index=0)
-#         father_skin_tone = skin_tones[int(father_skin_tone_index)]
-#         father_eye_color_index = st.selectbox("Select FATHER's Eye Color", options=range(len(eye_colors)), format_func=lambda x: eye_colors[x], index=0)
-#         father_eye_color = eye_colors[int(father_eye_color_index)]
-
-#     with st.expander("Mother Details"):
-#         mother_face_image = st.file_uploader("Upload Mother's Face Image", type=["jpg", "png"])
-#         mother_eye_image = st.file_uploader("Upload Mother's EYE FOCUSED Image", type=["jpg", "png"])
-#         mother_fingerprint_image = st.file_uploader("Upload Mother's FINGERPRINT Image", type=["jpg", "png"])
-#         mother_blood_group_index = st.selectbox("Select MOTHER's Blood Group", options=range(len(blood_groups)), format_func=lambda x: blood_groups[x], index=0)
-#         mother_blood_group = blood_groups[int(mother_blood_group_index)]
-#         mother_skin_tone_index = st.selectbox("Select MOTHER's Skin Tone", options=range(len(skin_tones)), format_func=lambda x: skin_tones[x], index=0)
-#         mother_skin_tone = skin_tones[int(mother_skin_tone_index)]
-#         mother_eye_color_index = st.selectbox("Select MOTHER's Eye Color", options=range(len(eye_colors)), format_func=lambda x: eye_colors[x], index=0)
-#         mother_eye_color = eye_colors[int(mother_eye_color_index)]
-
-
-
-
-
-
-#     if st.button('Submit'):
-#         skin_tone_model = load_model('/home/saad/Documents/6th-Semester/AI/SemesterProject/Frontend/models/skin_tone_model.h5')
-    
-#         # List of class names
-#         classes = ['Fair_Light', 'Medium_Tan', 'Dark_Deep']
-
-#         # Mapping dictionary for descriptive skin tone labels
-#         descriptive_labels = {
-#             'Fair_Light': 'Fair / Light',
-#             'Medium_Tan': 'Medium / Tan',
-#             'Dark_Deep': 'Dark / Deep'
-#         }
-
-#         # Load the MTCNN face detection model
-#         mtcnn = MTCNN()
-
-#         uploaded_file = child_face_image
-
-#         # Display uploaded image
-#         if uploaded_file is not None:
-#             image = np.array(bytearray(uploaded_file.read()), dtype=np.uint8)
-#             image = cv2.imdecode(image, 1)
-            
-            
-#         # # Predict button
-#         # if st.button('Predict Skin Tone'):
-#             # Detect faces
-#             try:
-#                 faces = mtcnn.detect_faces(image)
-#                 if len(faces) > 0:
-#                     largest_face = max(faces, key=lambda f: f['box'][2] * f['box'][3])
-#                     x, y, w, h = largest_face['box']
-#                     detected_face = image[y:y+h, x:x+w]
-                    
-#                     # Resize the detected face to the desired input shape
-#                     detected_face = cv2.resize(detected_face, (120, 90))
-                    
-#                     # Preprocess the detected face for classification
-#                     detected_face = tf.keras.applications.mobilenet_v2.preprocess_input(detected_face[np.newaxis, ...])
-                    
-#                     # Predict the class of the face
-#                     predictions = skin_tone_model.predict(detected_face)
-#                     predicted_class_idx = np.argmax(predictions)
-#                     predicted_class = classes[predicted_class_idx]
-                    
-#                     # Get the descriptive label from the mapping dictionary
-#                     descriptive_label = descriptive_labels[predicted_class]
-                    
-#                     # Display the prediction with a larger font and a message
-#                     st.write('')
-#                     st.write('')
-#                     st.write('')
-#                     st.write('**Predicted Skin Tone:**')
-#                     st.write(f'# {descriptive_label}')
-#                 else:
-#                     st.write('No face detected in the uploaded image.')
-#             except Exception as e:
-#                 st.write(f'Error detecting faces: {e}')
-
-
-# if __name__ == "__main__":
-#     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import streamlit as st
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-from mtcnn import MTCNN
-import cv2
-import eye_color
-import os
-
-
-
-def skin_tone():
-    skin_tone_model = load_model('skin_tone_model.h5')
-    
-    # List of class names
-    classes = ['Fair_Light', 'Medium_Tan', 'Dark_Deep']
-
-    # Mapping dictionary for descriptive skin tone labels
-    descriptive_labels = {
-        'Fair_Light': 'Fair / Light', # mother_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/mother4.jpg'
-    # father_image_path = '/home/saad/Documents/6th-Semester/AI/SemesterProject/Eye-Color-Detectionfinal/Eye-Color-Detection/father1.jpg'
-    # child_im
-        'Medium_Tan': 'Medium / Tan',
-        'Dark_Deep': 'Dark / Deep'
-    }
-
-    # Load the MTCNN face detection model
-    mtcnn = MTCNN()
-
-    uploaded_file = st.file_uploader('Upload an image ', type=['jpg', 'jpeg', 'png'])
-
-    # Display uploaded image
-    if uploaded_file is not None:
-        image = np.array(bytearray(uploaded_file.read()), dtype=np.uint8)
-        image = cv2.imdecode(image, 1)
-        
-        
-        # Predict button
-        if st.button('Predict Skin Tone'):
-            # Detect faces
-            try:
-                faces = mtcnn.detect_faces(image)
-                if len(faces) > 0:
-                    largest_face = max(faces, key=lambda f: f['box'][2] * f['box'][3])
-                    x, y, w, h = largest_face['box']
-                    detected_face = image[y:y+h, x:x+w]
-                    
-                    # Resize the detected face to the desired input shape
-                    detected_face = cv2.resize(detected_face, (120, 90))
-                    
-                    # Preprocess the detected face for classification
-                    detected_face = tf.keras.applications.mobilenet_v2.preprocess_input(detected_face[np.newaxis, ...])
-                    
-                    # Predict the class of the face
-                    predictions = skin_tone_model.predict(detected_face)
-                    predicted_class_idx = np.argmax(predictions)
-                    predicted_class = classes[predicted_class_idx]
-                    
-                    # Get the descriptive label from the mapping dictionary
-                    descriptive_label = descriptive_labels[predicted_class]
-                    
-                    # Display the prediction with a larger font and a message
-                    st.write('')
-                    st.write('')
-                    st.write('')
-                    st.write('**Predicted Skin Tone:**')
-                    st.write(f'# {descriptive_label}')
-                else:
-                    st.write('No face detected in the uploaded image.')
-            except Exception as e:
-                st.write(f'Error detecting faces: {e}')
 
 
 
